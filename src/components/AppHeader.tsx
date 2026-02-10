@@ -61,9 +61,7 @@ const AppHeader = () => {
             <span>Quick search...</span>
             <kbd className="ml-auto text-[10px] bg-muted/80 px-1.5 py-0.5 rounded border border-border">⌘K</kbd>
           </button>
-          <div className="w-9 h-9 rounded-xl bg-primary/20 flex items-center justify-center">
-            <span className="text-xs font-bold text-primary">VD</span>
-          </div>
+          <span className="text-sm font-medium text-foreground">Vaishnavi Deshpande</span>
         </div>
       </header>
 
