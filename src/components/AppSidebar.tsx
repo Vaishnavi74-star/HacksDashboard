@@ -1,0 +1,70 @@
+import { NavLink as RouterNavLink, useLocation } from 'react-router-dom';
+import { LayoutDashboard, UserPlus, Users, Layers, Zap } from 'lucide-react';
+
+const navItems = [
+  { title: 'Dashboard', path: '/', icon: LayoutDashboard },
+  { title: 'Register', path: '/register', icon: UserPlus },
+  { title: 'Participants', path: '/participants', icon: Users },
+  { title: 'Teams', path: '/teams', icon: Layers },
+];
+
+const AppSidebar = () => {
+  const location = useLocation();
+
+  return (
+    <aside className="fixed left-0 top-0 h-screen w-64 flex flex-col bg-sidebar border-r border-border z-50">
+      {/* Logo */}
+      <div className="flex items-center gap-3 px-6 py-6 border-b border-border">
+        <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
+          <Zap className="w-5 h-5 text-primary" />
+        </div>
+        <div>
+          <h1 className="text-sm font-bold text-foreground tracking-tight">HackDash</h1>
+          <p className="text-[10px] text-muted-foreground tracking-widest uppercase">Management</p>
+        </div>
+      </div>
+
+      {/* Nav */}
+      <nav className="flex-1 px-3 py-4 space-y-1">
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <RouterNavLink
+              key={item.path}
+              to={item.path}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${
+                isActive
+                  ? 'bg-primary/15 text-primary shadow-lg shadow-primary/5'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+              }`}
+            >
+              <div
+                className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                  isActive
+                    ? 'bg-primary/20'
+                    : 'bg-muted group-hover:bg-muted/80'
+                }`}
+              >
+                <item.icon className="w-4 h-4" />
+              </div>
+              <span>{item.title}</span>
+              {isActive && (
+                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary animate-glow-pulse" />
+              )}
+            </RouterNavLink>
+          );
+        })}
+      </nav>
+
+      {/* Footer */}
+      <div className="px-4 py-4 border-t border-border">
+        <div className="glass-card rounded-xl p-3 text-center">
+          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Powered by</p>
+          <p className="text-xs font-semibold gradient-text">HackDash v1.0</p>
+        </div>
+      </div>
+    </aside>
+  );
+};
+
+export default AppSidebar;
