@@ -1,5 +1,17 @@
-import { useLocation } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
+import { Participant } from '@/types/hackathon';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import {
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandSeparator,
+} from '@/components/ui/command';
 
 const pageTitles: Record<string, string> = {
   '/': 'Dashboard',
@@ -8,31 +20,86 @@ const pageTitles: Record<string, string> = {
   '/teams': 'Team Management',
 };
 
+const pages = [
+  { name: 'Dashboard', path: '/' },
+  { name: 'Register Participant', path: '/register' },
+  { name: 'Participants', path: '/participants' },
+  { name: 'Team Management', path: '/teams' },
+];
+
 const AppHeader = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const title = pageTitles[location.pathname] || 'Dashboard';
+  const [open, setOpen] = useState(false);
+  const [participants] = useLocalStorage<Participant[]>('hackathon-participants', []);
+
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setOpen(prev => !prev);
+      }
+    };
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
+  }, []);
 
   return (
-    <header className="h-16 border-b border-border flex items-center justify-between px-8 glass">
-      <div>
-        <h2 className="text-lg font-semibold text-foreground">{title}</h2>
-        <p className="text-xs text-muted-foreground">Hackathon Command Center</p>
-      </div>
-      <div className="flex items-center gap-4">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Quick search..."
-            className="w-56 h-9 pl-9 pr-4 rounded-xl bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
-            readOnly
-          />
+    <>
+      <header className="h-16 border-b border-border flex items-center justify-between px-8 glass">
+        <div>
+          <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+          <p className="text-xs text-muted-foreground">Hackathon Command Center</p>
         </div>
-        <div className="w-9 h-9 rounded-xl bg-primary/20 flex items-center justify-center">
-          <span className="text-xs font-bold text-primary">AD</span>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => setOpen(true)}
+            className="relative flex items-center w-56 h-9 pl-9 pr-4 rounded-xl bg-muted/50 border border-border text-sm text-muted-foreground hover:bg-muted/80 transition-all cursor-pointer"
+          >
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <span>Quick search...</span>
+            <kbd className="ml-auto text-[10px] bg-muted/80 px-1.5 py-0.5 rounded border border-border">⌘K</kbd>
+          </button>
+          <div className="w-9 h-9 rounded-xl bg-primary/20 flex items-center justify-center">
+            <span className="text-xs font-bold text-primary">VD</span>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      <CommandDialog open={open} onOpenChange={setOpen}>
+        <CommandInput placeholder="Search pages, participants..." />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Pages">
+            {pages.map(p => (
+              <CommandItem
+                key={p.path}
+                onSelect={() => { navigate(p.path); setOpen(false); }}
+              >
+                {p.name}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+          {participants.length > 0 && (
+            <>
+              <CommandSeparator />
+              <CommandGroup heading="Participants">
+                {participants.map(p => (
+                  <CommandItem
+                    key={p.id}
+                    onSelect={() => { navigate('/participants'); setOpen(false); }}
+                  >
+                    <span>{p.name}</span>
+                    <span className="ml-auto text-xs text-muted-foreground">{p.track}</span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </>
+          )}
+        </CommandList>
+      </CommandDialog>
+    </>
   );
 };
 
