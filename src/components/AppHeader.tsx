@@ -63,7 +63,7 @@ const AppHeader = () => {
           </button>
           <div className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-xl bg-primary/20 flex items-center justify-center">
-              <span className="text-xs font-bold text-primary">VD</span>
+              <span className="text-xs font-bold text-primary">AD</span>
             </div>
             <span className="text-sm font-medium text-foreground">Vaishnavi Deshpande</span>
           </div>
