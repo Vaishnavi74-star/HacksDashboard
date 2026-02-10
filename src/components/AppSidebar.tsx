@@ -1,5 +1,5 @@
 import { NavLink as RouterNavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, UserPlus, Users, Layers, Zap } from 'lucide-react';
+import { LayoutDashboard, UserPlus, Users, Layers, Zap, X } from 'lucide-react';
 
 const navItems = [
   { title: 'Dashboard', path: '/', icon: LayoutDashboard },
@@ -8,20 +8,37 @@ const navItems = [
   { title: 'Teams', path: '/teams', icon: Layers },
 ];
 
-const AppSidebar = () => {
+interface AppSidebarProps {
+  open: boolean;
+  onClose: () => void;
+  isMobile: boolean;
+}
+
+const AppSidebar = ({ open, onClose, isMobile }: AppSidebarProps) => {
   const location = useLocation();
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 flex flex-col bg-sidebar border-r border-border z-50">
+    <aside
+      className={`fixed left-0 top-0 h-screen w-64 flex flex-col bg-sidebar border-r border-border z-50 transition-transform duration-300 ${
+        open ? 'translate-x-0' : '-translate-x-full'
+      }`}
+    >
       {/* Logo */}
-      <div className="flex items-center gap-3 px-6 py-6 border-b border-border">
-        <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
-          <Zap className="w-5 h-5 text-primary" />
+      <div className="flex items-center justify-between px-6 py-6 border-b border-border">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
+            <Zap className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-sm font-bold text-foreground tracking-tight">HackDash</h1>
+            <p className="text-[10px] text-muted-foreground tracking-widest uppercase">Management</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-sm font-bold text-foreground tracking-tight">HackDash</h1>
-          <p className="text-[10px] text-muted-foreground tracking-widest uppercase">Management</p>
-        </div>
+        {isMobile && (
+          <button onClick={onClose} className="p-1 rounded-lg hover:bg-muted/50 text-muted-foreground">
+            <X className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
       {/* Nav */}
@@ -32,6 +49,7 @@ const AppSidebar = () => {
             <RouterNavLink
               key={item.path}
               to={item.path}
+              onClick={() => isMobile && onClose()}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${
                 isActive
                   ? 'bg-primary/15 text-primary shadow-lg shadow-primary/5'

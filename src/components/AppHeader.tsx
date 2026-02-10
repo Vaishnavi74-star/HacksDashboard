@@ -1,6 +1,6 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Search } from 'lucide-react';
+import { Search, Menu } from 'lucide-react';
 import { Participant } from '@/types/hackathon';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import {
@@ -27,7 +27,12 @@ const pages = [
   { name: 'Team Management', path: '/teams' },
 ];
 
-const AppHeader = () => {
+interface AppHeaderProps {
+  onMenuToggle: () => void;
+  isMobile: boolean;
+}
+
+const AppHeader = ({ onMenuToggle, isMobile }: AppHeaderProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const title = pageTitles[location.pathname] || 'Dashboard';
@@ -47,25 +52,38 @@ const AppHeader = () => {
 
   return (
     <>
-      <header className="h-16 border-b border-border flex items-center justify-between px-8 glass">
-        <div>
-          <h2 className="text-lg font-semibold text-foreground">{title}</h2>
-          <p className="text-xs text-muted-foreground">Hackathon Command Center</p>
+      <header className="h-16 border-b border-border flex items-center justify-between px-4 md:px-8 glass">
+        <div className="flex items-center gap-3">
+          {isMobile && (
+            <button onClick={onMenuToggle} className="p-2 rounded-xl hover:bg-muted/50 text-muted-foreground">
+              <Menu className="w-5 h-5" />
+            </button>
+          )}
+          <div>
+            <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+            {!isMobile && <p className="text-xs text-muted-foreground">Hackathon Command Center</p>}
+          </div>
         </div>
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => setOpen(true)}
-            className="relative flex items-center w-56 h-9 pl-9 pr-4 rounded-xl bg-muted/50 border border-border text-sm text-muted-foreground hover:bg-muted/80 transition-all cursor-pointer"
-          >
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <span>Quick search...</span>
-            <kbd className="ml-auto text-[10px] bg-muted/80 px-1.5 py-0.5 rounded border border-border">⌘K</kbd>
-          </button>
+        <div className="flex items-center gap-2 md:gap-4">
+          {!isMobile ? (
+            <button
+              onClick={() => setOpen(true)}
+              className="relative flex items-center w-56 h-9 pl-9 pr-4 rounded-xl bg-muted/50 border border-border text-sm text-muted-foreground hover:bg-muted/80 transition-all cursor-pointer"
+            >
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <span>Quick search...</span>
+              <kbd className="ml-auto text-[10px] bg-muted/80 px-1.5 py-0.5 rounded border border-border">⌘K</kbd>
+            </button>
+          ) : (
+            <button onClick={() => setOpen(true)} className="p-2 rounded-xl hover:bg-muted/50 text-muted-foreground">
+              <Search className="w-5 h-5" />
+            </button>
+          )}
           <div className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-xl bg-primary/20 flex items-center justify-center">
               <span className="text-xs font-bold text-primary">AD</span>
             </div>
-            <span className="text-sm font-medium text-foreground">Vaishnavi Deshpande</span>
+            {!isMobile && <span className="text-sm font-medium text-foreground">Vaishnavi Deshpande</span>}
           </div>
         </div>
       </header>
