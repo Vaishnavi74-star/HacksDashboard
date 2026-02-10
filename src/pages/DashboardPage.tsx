@@ -1,99 +1,97 @@
-import { Users, UserCheck, UserX, Layers } from 'lucide-react';
+import { lazy, Suspense } from 'react';
+import { motion } from 'framer-motion';
+import { Users, UserCheck, UserX, Layers, ArrowRight } from 'lucide-react';
 import { Participant, Team } from '@/types/hackathon';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import StatCard from '@/components/StatCard';
-import StatusBadge from '@/components/StatusBadge';
+import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
+
+const HeroScene = lazy(() => import('@/components/HeroScene'));
+import AboutSection from '@/components/landing/AboutSection';
+import ProblemStatementsSection from '@/components/landing/ProblemStatementsSection';
+import TimelineSection from '@/components/landing/TimelineSection';
+import LeaderboardSection from '@/components/landing/LeaderboardSection';
+import JudgesSection from '@/components/landing/JudgesSection';
+import SubmissionSection from '@/components/landing/SubmissionSection';
+import ContactSection from '@/components/landing/ContactSection';
 
 const DashboardPage = () => {
   const [participants] = useLocalStorage<Participant[]>('hackathon-participants', []);
   const [teams] = useLocalStorage<Team[]>('hackathon-teams', []);
+  const navigate = useNavigate();
 
   const totalParticipants = participants.length;
   const checkedIn = participants.filter(p => p.checkInStatus === 'Checked-In').length;
   const checkedOut = participants.filter(p => p.checkInStatus === 'Checked-Out').length;
   const totalTeams = teams.length;
 
-  const trackCounts = participants.reduce<Record<string, number>>((acc, p) => {
-    acc[p.track] = (acc[p.track] || 0) + 1;
-    return acc;
-  }, {});
-
-  const recentParticipants = [...participants].reverse().slice(0, 5);
-
   return (
-    <div className="space-y-8 animate-fade-up">
+    <div className="space-y-0 -m-8">
       {/* Hero */}
-      <div className="glass-card rounded-2xl p-8 gradient-border overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="relative">
-          <h1 className="text-3xl font-bold">
+      <section className="relative overflow-hidden px-8 pt-8">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
+        <div className="relative max-w-6xl mx-auto text-center">
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="text-5xl md:text-6xl font-bold mb-4"
+          >
             Welcome to <span className="gradient-text">HackDash</span>
-          </h1>
-          <p className="text-muted-foreground mt-2 max-w-lg">
-            Your command center for managing hackathon participants, teams, and check-ins. Everything updates in real-time.
-          </p>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6"
+          >
+            Your command center for the ultimate hackathon experience. Build, compete, and innovate.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="flex gap-4 justify-center mb-4"
+          >
+            <Button onClick={() => navigate('/register')} className="rounded-xl px-6 shadow-lg shadow-primary/20">
+              Register Now <ArrowRight className="w-4 h-4 ml-1" />
+            </Button>
+            <Button variant="outline" onClick={() => navigate('/teams')} className="rounded-xl px-6">
+              Manage Teams
+            </Button>
+          </motion.div>
         </div>
-      </div>
+
+        <Suspense fallback={<div className="h-[600px] flex items-center justify-center text-muted-foreground">Loading 3D scene...</div>}>
+          <HeroScene />
+        </Suspense>
+      </section>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard title="Total Participants" value={totalParticipants} icon={Users} accent="primary" />
-        <StatCard title="Checked In" value={checkedIn} icon={UserCheck} accent="success" />
-        <StatCard title="Checked Out" value={checkedOut} icon={UserX} accent="destructive" />
-        <StatCard title="Teams" value={totalTeams} icon={Layers} accent="accent" />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Participants */}
-        <div className="glass-card rounded-2xl p-6">
-          <h3 className="text-sm font-semibold text-foreground mb-4">Recent Registrations</h3>
-          {recentParticipants.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-8">No participants yet. Register your first one!</p>
-          ) : (
-            <div className="space-y-3">
-              {recentParticipants.map((p) => (
-                <div key={p.id} className="flex items-center justify-between p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center text-xs font-bold text-primary">
-                      {p.name.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-foreground">{p.name}</p>
-                      <p className="text-xs text-muted-foreground">{p.track}</p>
-                    </div>
-                  </div>
-                  <StatusBadge status={p.checkInStatus} />
-                </div>
-              ))}
-            </div>
-          )}
+      <section className="px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          <StatCard title="Total Participants" value={totalParticipants} icon={Users} accent="primary" />
+          <StatCard title="Checked In" value={checkedIn} icon={UserCheck} accent="success" />
+          <StatCard title="Checked Out" value={checkedOut} icon={UserX} accent="destructive" />
+          <StatCard title="Teams" value={totalTeams} icon={Layers} accent="accent" />
         </div>
+      </section>
 
-        {/* Track Distribution */}
-        <div className="glass-card rounded-2xl p-6">
-          <h3 className="text-sm font-semibold text-foreground mb-4">Track Distribution</h3>
-          {Object.keys(trackCounts).length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-8">No data yet.</p>
-          ) : (
-            <div className="space-y-4">
-              {Object.entries(trackCounts).map(([track, count]) => (
-                <div key={track}>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="text-muted-foreground">{track}</span>
-                    <span className="font-medium text-foreground">{count}</span>
-                  </div>
-                  <div className="h-2 rounded-full bg-muted overflow-hidden">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-all duration-500"
-                      style={{ width: `${totalParticipants > 0 ? (count / totalParticipants) * 100 : 0}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
+      <AboutSection />
+      <ProblemStatementsSection />
+      <TimelineSection />
+      <LeaderboardSection />
+      <JudgesSection />
+      <SubmissionSection />
+      <ContactSection />
+
+      {/* Footer */}
+      <footer className="py-12 px-8 border-t border-border text-center">
+        <p className="text-sm text-muted-foreground">
+          Built with 💜 by <span className="gradient-text font-semibold">HackDash</span> — The Future of Hackathon Management
+        </p>
+      </footer>
     </div>
   );
 };
