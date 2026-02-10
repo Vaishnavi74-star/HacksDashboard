@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { Users, UserCheck, UserX, Layers, ArrowRight } from 'lucide-react';
 import { Participant, Team } from '@/types/hackathon';
@@ -7,7 +7,7 @@ import StatCard from '@/components/StatCard';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 
-const HeroScene = lazy(() => import('@/components/HeroScene'));
+import HeroScene from '@/components/HeroScene';
 import AboutSection from '@/components/landing/AboutSection';
 import ProblemStatementsSection from '@/components/landing/ProblemStatementsSection';
 import TimelineSection from '@/components/landing/TimelineSection';
@@ -63,9 +63,7 @@ const DashboardPage = () => {
           </motion.div>
         </div>
 
-        <Suspense fallback={<div className="h-[600px] flex items-center justify-center text-muted-foreground">Loading 3D scene...</div>}>
-          <HeroScene />
-        </Suspense>
+        <HeroScene />
       </section>
 
       {/* Stats */}

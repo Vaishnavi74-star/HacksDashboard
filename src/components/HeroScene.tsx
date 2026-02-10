@@ -89,7 +89,7 @@ const NeonRing = ({ radius, color, speed }: { radius: number; color: string; spe
 
 const HeroScene = () => {
   return (
-    <div className="w-full h-[600px] relative">
+    <div className="w-full h-[350px] relative -mt-4">
       <Canvas camera={{ position: [0, 0, 5], fov: 60 }} gl={{ alpha: true, antialias: true }}>
         <ambientLight intensity={0.3} />
         <pointLight position={[5, 5, 5]} intensity={1} color="#818cf8" />
