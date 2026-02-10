@@ -11,7 +11,7 @@ import HeroScene from '@/components/HeroScene';
 import AboutSection from '@/components/landing/AboutSection';
 import ProblemStatementsSection from '@/components/landing/ProblemStatementsSection';
 import TimelineSection from '@/components/landing/TimelineSection';
-import LeaderboardSection from '@/components/landing/LeaderboardSection';
+
 import JudgesSection from '@/components/landing/JudgesSection';
 import SubmissionSection from '@/components/landing/SubmissionSection';
 import ContactSection from '@/components/landing/ContactSection';
@@ -79,7 +79,7 @@ const DashboardPage = () => {
       <AboutSection />
       <ProblemStatementsSection />
       <TimelineSection />
-      <LeaderboardSection />
+      
       <JudgesSection />
       <SubmissionSection />
       <ContactSection />
