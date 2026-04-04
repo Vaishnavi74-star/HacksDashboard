@@ -15,10 +15,13 @@ import TimelineSection from '@/components/landing/TimelineSection';
 import JudgesSection from '@/components/landing/JudgesSection';
 import SubmissionSection from '@/components/landing/SubmissionSection';
 import ContactSection from '@/components/landing/ContactSection';
+import { useAdmin } from '@/contexts/AdminContext';
+import AdminPanel from '@/components/AdminPanel';
 
 const DashboardPage = () => {
   const [participants] = useLocalStorage<Participant[]>('hackathon-participants', []);
   const [teams] = useLocalStorage<Team[]>('hackathon-teams', []);
+  const { adminName } = useAdmin();
   const navigate = useNavigate();
 
   const totalParticipants = participants.length;
@@ -38,7 +41,7 @@ const DashboardPage = () => {
             transition={{ duration: 0.7 }}
             className="text-5xl md:text-6xl font-bold mb-4"
           >
-            Welcome to <span className="gradient-text">HackDash</span>
+            Welcome to <span className="gradient-text">{adminName}</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -60,6 +63,7 @@ const DashboardPage = () => {
             <Button variant="outline" onClick={() => navigate('/teams')} className="rounded-xl px-6">
               Manage Teams
             </Button>
+            <AdminPanel />
           </motion.div>
         </div>
 
@@ -87,7 +91,7 @@ const DashboardPage = () => {
       {/* Footer */}
       <footer className="py-12 px-8 border-t border-border text-center">
         <p className="text-sm text-muted-foreground">
-          Built with 💜 by <span className="gradient-text font-semibold">HackDash</span> — The Future of Hackathon Management
+          Built with 💜 by <span className="gradient-text font-semibold">{adminName}</span> — The Future of Hackathon Management
         </p>
       </footer>
     </div>

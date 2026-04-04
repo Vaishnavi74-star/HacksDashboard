@@ -1,18 +1,14 @@
 import { motion } from 'framer-motion';
-import { Calendar, Users, Code2, Trophy, Presentation, PartyPopper } from 'lucide-react';
+import { HackathonEvent } from '@/types/hackathon';
+import { useAdmin } from '@/contexts/AdminContext';
+import { iconMap } from '@/lib/icons';
 
-const events = [
-  { icon: Calendar, title: 'Registration Opens', date: 'March 1, 2026', desc: 'Sign up and form your dream team.' },
-  { icon: Users, title: 'Team Formation', date: 'March 10, 2026', desc: 'Find teammates, brainstorm ideas.' },
-  { icon: Code2, title: 'Hackathon Begins', date: 'March 15, 2026', desc: '48 hours of non-stop building.' },
-  { icon: Presentation, title: 'Mentorship Sessions', date: 'March 15-16', desc: 'Get guidance from industry experts.' },
-  { icon: Trophy, title: 'Final Demos', date: 'March 17, 2026', desc: 'Present to judges and audience.' },
-  { icon: PartyPopper, title: 'Awards Ceremony', date: 'March 17, 2026', desc: 'Celebrate winners and achievements.' },
-];
+const TimelineSection = () => {
+  const { events } = useAdmin();
 
-const TimelineSection = () => (
-  <section className="py-24 px-8 relative" id="timeline">
-    <div className="max-w-4xl mx-auto">
+  return (
+    <section className="py-24 px-8 relative" id="timeline">
+      <div className="max-w-4xl mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -38,7 +34,10 @@ const TimelineSection = () => (
               className="relative pl-20"
             >
               <div className="absolute left-4 w-8 h-8 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
-                <e.icon className="w-4 h-4 text-primary" />
+                {(() => {
+                  const IconComponent = iconMap[e.iconName];
+                  return IconComponent ? <IconComponent className="w-4 h-4 text-primary" /> : null;
+                })()}
               </div>
               <div className="glass-card rounded-2xl p-5 hover:border-primary/20 transition-colors">
                 <span className="text-xs text-primary font-medium">{e.date}</span>
@@ -51,6 +50,7 @@ const TimelineSection = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
 export default TimelineSection;

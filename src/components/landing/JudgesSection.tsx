@@ -1,14 +1,9 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Judge } from '@/types/hackathon';
+import { useAdmin } from '@/contexts/AdminContext';
 
-const judges = [
-  { name: 'Dr. Priya Sharma', role: 'AI Research Lead, Google', bio: '15+ years in machine learning. Published 40+ papers on NLP and computer vision.', initials: 'PS' },
-  { name: 'Arjun Mehta', role: 'CTO, TechNova', bio: 'Serial entrepreneur. Built 3 startups from zero to acquisition. Y Combinator alum.', initials: 'AM' },
-  { name: 'Sarah Chen', role: 'VP Engineering, Meta', bio: 'Led teams building products used by 2B+ users. Passionate about developer tools.', initials: 'SC' },
-  { name: 'Raj Patel', role: 'Partner, Sequoia Capital', bio: 'Early investor in 10+ unicorns. Focuses on deep-tech and climate startups.', initials: 'RP' },
-];
-
-const JudgeCard = ({ judge, index }: { judge: typeof judges[0]; index: number }) => {
+const JudgeCard = ({ judge, index }: { judge: Judge; index: number }) => {
   const [flipped, setFlipped] = useState(false);
 
   return (
@@ -40,7 +35,10 @@ const JudgeCard = ({ judge, index }: { judge: typeof judges[0]; index: number })
   );
 };
 
-const JudgesSection = () => (
+const JudgesSection = () => {
+  const { judges } = useAdmin();
+
+  return (
   <section className="py-24 px-8 relative" id="judges">
     <div className="max-w-6xl mx-auto">
       <motion.div
@@ -60,6 +58,7 @@ const JudgesSection = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
 export default JudgesSection;

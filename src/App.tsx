@@ -9,26 +9,29 @@ import RegisterPage from "./pages/RegisterPage";
 import ParticipantsPage from "./pages/ParticipantsPage";
 import TeamsPage from "./pages/TeamsPage";
 import NotFound from "./pages/NotFound";
+import { AdminProvider } from "@/contexts/AdminContext";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route element={<DashboardLayout />}>
-            <Route path="/" element={<DashboardPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/participants" element={<ParticipantsPage />} />
-            <Route path="/teams" element={<TeamsPage />} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AdminProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route element={<DashboardLayout />}>
+              <Route path="/" element={<DashboardPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/participants" element={<ParticipantsPage />} />
+              <Route path="/teams" element={<TeamsPage />} />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AdminProvider>
   </QueryClientProvider>
 );
 

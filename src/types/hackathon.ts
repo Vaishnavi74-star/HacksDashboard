@@ -17,3 +17,17 @@ export interface Team {
   name: string;
   members: string[]; // participant IDs
 }
+
+export interface Judge {
+  name: string;
+  role: string;
+  bio: string;
+  initials: string;
+}
+
+export interface HackathonEvent {
+  title: string;
+  date: string;
+  desc: string;
+  iconName: string; // e.g., 'Calendar', 'Users', etc.
+}

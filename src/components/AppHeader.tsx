@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Search, Menu } from 'lucide-react';
 import { Participant } from '@/types/hackathon';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { useAdmin } from '@/contexts/AdminContext';
 import {
   CommandDialog,
   CommandInput,
@@ -38,6 +39,15 @@ const AppHeader = ({ onMenuToggle, isMobile }: AppHeaderProps) => {
   const title = pageTitles[location.pathname] || 'Dashboard';
   const [open, setOpen] = useState(false);
   const [participants] = useLocalStorage<Participant[]>('hackathon-participants', []);
+  const { adminName } = useAdmin();
+
+  const adminInitials = useMemo(() => {
+    return adminName
+      .split(' ')
+      .filter(Boolean)
+      .map((part) => part[0]?.toUpperCase())
+      .join('') || 'AD';
+  }, [adminName]);
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -81,9 +91,9 @@ const AppHeader = ({ onMenuToggle, isMobile }: AppHeaderProps) => {
           )}
           <div className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-xl bg-primary/20 flex items-center justify-center">
-              <span className="text-xs font-bold text-primary">AD</span>
+              <span className="text-xs font-bold text-primary">{adminInitials}</span>
             </div>
-            {!isMobile && <span className="text-sm font-medium text-foreground">Vaishnavi Deshpande</span>}
+            {!isMobile && <span className="text-sm font-medium text-foreground">{adminName}</span>}
           </div>
         </div>
       </header>
