@@ -12,7 +12,7 @@ A modern web application that helps organizers manage a college hackathon effici
 This system simulates a real hackathon control panel used by event coordinators.  
 It allows organizers to register participants, monitor their check-in/check-out status, and dynamically create teams only from participants who are physically present in event.
 
-The application is fully frontend-based and stores all data in the browser using local storage.
+The application is fully frontend-based and stores all data in the browser using local storage and live link.
 
 ---
 
