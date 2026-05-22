@@ -1,7 +1,7 @@
 # 🌐 Live Demo  
 👉 https://hacksdashboardproject.netlify.app
 
-# Hackathon Management Dashboard
+# Hackathon Management Dashboard ready to see
 
 A modern web application that helps organizers manage a college hackathon efficiently — from participant registration to attendance tracking and team formation.
 
