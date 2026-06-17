@@ -1,4 +1,4 @@
-# 🌐 Live Demo  
+# 🌐 Live website for the referral
 👉 https://hacksdashboardproject.netlify.app
 
 # Hackathon Management Dashboard ready to see the more changes
