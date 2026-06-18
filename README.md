@@ -127,7 +127,7 @@ During a hackathon event:
 ---
 
 ## 👤 Author  
-Vaishnavi Deshpande  
+Vaishnavi Deshpande.
 
 ---
 
